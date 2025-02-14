@@ -29,11 +29,12 @@ class Simulator:
         init (dict): The initial state of the universe.
     """
 
-    def __init__(self, store: QRangeStore, init: dict):
+    def __init__(self, store: QRangeStore, init: dict, iterations: int = 500):
         self.store = store
         store[-999999999, 0] = init
         self.init = init
         self.times = {agentId: state["time"] for agentId, state in init.items()}
+        self.iterations = iterations
 
     def read(self, t):
         try:
@@ -42,7 +43,9 @@ class Simulator:
             data = []
         return reduce(__or__, data, {}) # combine all data into one dictionary
 
-    def simulate(self, iterations: int = 500):
+    def simulate(self, iterations: int = 0):
+        if not iterations:
+            iterations = self.iterations
         for _ in range(iterations):
             for agentId in self.init:
                 t = self.times[agentId]

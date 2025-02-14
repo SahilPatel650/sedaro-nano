@@ -9,6 +9,8 @@ from simulator import Simulator
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from store import QRangeStore
 
+import logging
+
 
 class Base(DeclarativeBase):
     pass
@@ -36,6 +38,11 @@ with app.app_context():
     db.create_all()
 
 
+############################## Log ##############################
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 ############################## API Endpoints ##############################
 
 
@@ -60,14 +67,16 @@ def simulate():
     # }
 
     # Define time and timeStep for each agent
-    init: dict = request.json
+    req: dict = request.json
+    init = req['simulationData']
+    settings = req['settingsData']
     for key in init.keys():
         init[key]["time"] = 0
-        init[key]["timeStep"] = 0.01
+        init[key]["timeStep"] = settings['timeStep']
 
     # Create store and simulator
     store = QRangeStore()
-    simulator = Simulator(store=store, init=init)
+    simulator = Simulator(store=store, init=init, iterations=settings['simulationCycle'])
 
     # Run simulation
     simulator.simulate()
@@ -78,3 +87,8 @@ def simulate():
     db.session.commit()
 
     return store.store
+
+
+#star trail
+#time series
+# sim details - quantify how long it took to get to a certain point (ie time between 2 points)
