@@ -6,6 +6,8 @@
   "dependencies": {
     "@radix-ui/react-form": "^0.1.0",
     "@radix-ui/themes": "^3.1.4",
+    "@react-three/drei": "^9.121.5",
+    "@react-three/fiber": "^8.17.14",
     "@types/lodash": "^4.17.12",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
@@ -16,6 +18,7 @@
     "react-dom": "^18.3.1",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.27.0",
+    "three": "^0.173.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.9",
     "vite-plugin-svgr": "^4.2.0",
