@@ -73,11 +73,16 @@ const App = () => {
         </Link>
         <Separator size="4" my="5" />
 
-        {/* 3D Canvas */}
-        <Canvas style={{ width: '80%', height: '500px', backgroundColor: '#ffffff' }}>
+
+        <Canvas 
+          style={{ width: '80%', height: '500px', backgroundColor: '#ffffff' }}
+          camera={{ position: [-20, -30, 40], fov: 100 }} 
+          >
           <ambientLight intensity={1.2} />
           <directionalLight position={[5, 5, 5]} intensity={1.2} />
-          <OrbitControls enableZoom={true} />
+          <OrbitControls enableZoom={true} 
+            target={[0, 0, 0]}
+          />
 
           {simulationData.length > 1 && (
             <SimulationObjects data={simulationData} currentTime={currentTime} isPlaying={isPlaying} setCurrentTime={setCurrentTime}/>
