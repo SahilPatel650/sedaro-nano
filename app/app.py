@@ -61,9 +61,12 @@ def get_data():
 @app.post("/simulation")
 def simulate():
     # Get data from request in this form
-    # init = {
+    # { 
+    #   simulationData = {
     #     "Body1": {"x": 0, "y": 0.1, "vx": 0.1, "vy": 0},
     #     "Body2": {"x": 0, "y": 1, "vx": 1, "vy": 0},
+    #   },
+    #   settingsData = { "timeStep": 0.1, "simulationCycle": 100 }
     # }
 
     # Define time and timeStep for each agent

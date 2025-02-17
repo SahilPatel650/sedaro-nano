@@ -1,6 +1,8 @@
 # DATA STRUCTURE
 
 import doctest
+from intervaltree import Interval, IntervalTree
+
 
 
 class QRangeStore:
@@ -35,7 +37,8 @@ class QRangeStore:
     """
 
     def __init__(self):
-        self.store = []
+        self._tree = IntervalTree()
+
 
     def __setitem__(self, rng, value):
         try:
@@ -44,13 +47,17 @@ class QRangeStore:
             raise IndexError("Invalid Range: must provide a low and high value.")
         if not low < high:
             raise IndexError("Invalid Range.")
-        self.store.append((low, high, value))
+        self._tree[low:high] = value
 
     def __getitem__(self, key):
-        ret = [v for (l, h, v) in self.store if l <= key < h]
-        if not ret:
+        intervals = self._tree[key]
+        if not intervals:
             raise IndexError("Not found.")
-        return ret
+        return [iv.data for iv in intervals]
+    @property
+    def store(self):
+        """Return the intervals as a list of (low, high, value) tuples."""
+        return [(iv.begin, iv.end, iv.data) for iv in sorted(self._tree)]
 
 
 doctest.testmod()
