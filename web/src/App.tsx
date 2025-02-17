@@ -129,48 +129,18 @@ const App = () => {
   );
 };
 
-// Linear interpolation function
-const lerp = (start: number, end: number, t: number) => {
-  return start * (1 - t) + end * t;
-};
-
 // Component to display simulation objects with velocity vectors
 const SimulationObjects = ({ data, currentTime, isPlaying, setCurrentTime }: SimulationObjectsProps) => {
   const refs = useRef<Record<string, THREE.Mesh>>({});
-  const t = useRef(0); // Use a ref to persist t between renders
-  const speed = 1; // Adjust this to control the speed of the animation
 
-  // Track the last known position for each body
-  const lastKnownPositions = useRef<Record<string, { x: number; y: number; z: number }>>({});
-
-  useFrame((state, delta) => {
+  useFrame(() => {
     if (!isPlaying) return;
 
     const currentFrame = data[currentTime][2];
-    const nextFrame = data[Math.min(currentTime + 1, data.length - 1)][2];
-
-    const timeDifference = data[currentTime + 1]?.[0] - data[currentTime]?.[0];
-
-    t.current += (delta / timeDifference) * speed;
-
-    if (t.current >= 1) {
-      t.current = 0;
-      setCurrentTime(currentTime < data.length - 1 ? currentTime + 1 : 0);
-    }
 
     Object.entries(currentFrame).forEach(([agentId, { x, y, z }]) => {
-      const nextPos = nextFrame[agentId];
-
-      lastKnownPositions.current[agentId] = { x, y, z };
-
       if (refs.current[agentId]) {
-        const targetX = nextPos?.x ?? lastKnownPositions.current[agentId].x;
-        const targetY = nextPos?.y ?? lastKnownPositions.current[agentId].y;
-        const targetZ = nextPos?.z ?? lastKnownPositions.current[agentId].z;
-
-        refs.current[agentId].position.x = lerp(x, targetX, t.current);
-        refs.current[agentId].position.y = lerp(y, targetY, t.current);
-        refs.current[agentId].position.z = lerp(z, targetZ, t.current);
+        refs.current[agentId].position.set(x, y, z);
       }
     });
   });
@@ -180,7 +150,7 @@ const SimulationObjects = ({ data, currentTime, isPlaying, setCurrentTime }: Sim
       {Object.entries(data[currentTime][2]).map(([agentId, { x, y, z }]) => {
         return (
           <mesh key={agentId} position={[x, y, z]} ref={(el) => (refs.current[agentId] = el!)}>
-            <sphereGeometry args={[1, 32, 32]} />
+            <sphereGeometry args={[1, 64, 64]} />
             <meshStandardMaterial color="red" />
           </mesh>
         );
