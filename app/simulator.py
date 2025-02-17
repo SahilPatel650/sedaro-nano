@@ -41,16 +41,20 @@ class Simulator:
             data = self.store[t]
         except IndexError:
             data = []
-        return reduce(__or__, data, {}) # combine all data into one dictionary
+        result = {}
+        for d in data:
+            result.update(d)
+        return result
 
     def simulate(self, iterations: int = 0):
         if not iterations:
             iterations = self.iterations
+        init_set = set(self.init)
         for _ in range(iterations):
             for agentId in self.init:
                 t = self.times[agentId]
                 universe = self.read(t - 0.001)
-                if set(universe) == set(self.init):
+                if set(universe) == init_set:
                     newState = propagate(agentId, universe)
                     self.store[t, newState["time"]] = {agentId: newState}
                     self.times[agentId] = newState["time"]

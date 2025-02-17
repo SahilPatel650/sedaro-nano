@@ -15,3 +15,12 @@ services:
     volumes:
       - ./app/:/app/
       - /app/instance/
+    #add gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
