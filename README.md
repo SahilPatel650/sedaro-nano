@@ -65,6 +65,7 @@
   - Avoids complex relational dependencies while ensuring **fast access times**.
 - **Mass-Proportional Rendering:** Scale bodies based on mass.
   - This was omitted due to lack of density information.
+- **Testing**: Do more performace testing and customer discovery to understand needs and limitations.
 
 ---
 
