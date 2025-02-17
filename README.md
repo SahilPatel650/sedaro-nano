@@ -1,3 +1,89 @@
+# Sedaro Nano Project Writeup
+
+## Changes and Enhancements
+
+### Backend
+
+#### **QRangeStore Optimization**
+- **Change:** Replaced the list-based range storage with an **IntervalTree**.
+- **Justification:**
+  - The original implementation used a list, requiring **O(n)** lookup time to retrieve overlapping ranges.
+  - An **IntervalTree** reduces lookup complexity to **O(log n)**, significantly improving efficiency.
+  - This change is particularly beneficial when handling a large number of range queries.
+- **Impact:**
+  - Improved query performance for retrieving relevant values.
+  - Enhanced scalability and responsiveness.
+  - Below is an image visualizing the efficiency gains when we have 10 bodies.
+  - More in depth testing data is available in the SimData.xlsx file
+  ![](./QRangeSpeedUp.png)
+
+#### **Propagation Function Optimization**
+- **Change:** Replaced NumPy-based calculations with **CUDA acceleration via Numba**.
+- **Justification:**
+  - The original implementation computed gravitational interactions using NumPy, which is limited by single-threaded execution.
+  - Utilizing **CUDA parallelization**, the propagation function can leverage GPU acceleration for faster computations.
+  - This optimization is particularly valuable for multi-body simulations.
+- **Impact:**
+  - Reduced computation time per cycle.
+  - Enabled handling of a greater number of celestial bodies efficiently.
+  
+---
+
+### Frontend
+
+#### **Graphical Representation Upgrade**
+- **Change:** Switched from a static plot of position over time to an **interactive ThreeJS-based 3D simulation**.
+- **Justification:**
+  - Original visualization lacked interactivity and real-time updates.
+  - ThreeJS provides a **more immersive** representation, allowing users to dynamically view simulation changes.
+- **Impact:**
+  - More engaging and visually intuitive representation of orbital mechanics.
+  - Better user control over simulation parameters.
+
+#### **Input Enhancements**
+- **Change:** Added **N-body input support** and slider to set number of **simulation cycles** and **time steps**.
+- **Justification:**
+  - The original implementation was limited to 2 bodies, restricting simulation complexity.
+  - Allowing any number of bodies increases flexibility and realism.
+  - Fixed values for simulation cycles (500) and timestep (0.1) did not meet diverse user needs.
+  - Sliders for these parameters enable user customization.
+- **Impact:**
+    - Allows user to simulate more complex simulations
+    - Creates a more versatile system
+
+
+
+---
+
+## Future Improvements
+
+### **If Given More Time**
+- **Data Upload Support:** Allow users to upload initial conditions with file instead of manual input.
+- **Smooth Animation:** Implement **linear interpolation (LERP)** in ThreeJS for smoother motion.
+- **Database Integration:**
+  - Introduce **MongoDB** for efficient data storage.
+  - Avoids complex relational dependencies while ensuring **fast access times**.
+- **Mass-Proportional Rendering:** Scale bodies based on mass.
+  - This was omitted due to lack of density information.
+
+---
+
+## Design Choices and Trade-offs
+
+### **What I Didn't Do and Why**
+
+#### **Real-Time Streaming**
+- **Reason:** The simulation executes rapidly, making real-time playback unnecessary. If this were to become a requirement, I would create a buffered playback mechanism to reduce any mismatch between simulation and playback speed.
+
+#### **Native CUDA Implementation**
+- **Reason:** While CUDA with Numba provided speed improvements, rewriting the entire simulation in raw CUDA was not pursued due to:
+  - Lack of bottleneck testing.
+  - The relative simplicity of the simulation not justifying extreme optimization.
+
+---
+
+
+
 # Sedaro Nano
 
 The tiniest possible mockup of our system
