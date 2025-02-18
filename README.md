@@ -1,5 +1,11 @@
 # Sedaro Nano Project Writeup
 
+## Setup Changes
+
+In order to enable CUDA support, I changed the base app image to the CUDA 12.1.0 Ubuntu runtime image. Also, the GPU capability was added to the compose file. I chose v12.1.0 as this is the version of CUDA I had installed on my computer. While it should most likely be back and forward compatable, if there are any issues please check https://docs.nvidia.com/deploy/cuda-compatibility/. The easiest option is to change the version number to what your OS is running (can be checked via the `nvidia-smi` command). 
+
+TLDR: None of the steps to set up the container have changed assuming you have NVIDIA Container Toolkit installed and your CUDA version is compatable with v12.1.0. 
+
 ## Changes and Enhancements
 
 ### Backend
